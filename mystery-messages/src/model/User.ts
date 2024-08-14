@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-
+// custom datatype
 export interface Message extends Document {
     content: string,
     createdAt: Date
