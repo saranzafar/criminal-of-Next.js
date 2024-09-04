@@ -104,8 +104,13 @@ function Page() {
     }
 
     const { username } = session?.user as User
-    const baseUrl = `${window.location.protocol}//${window.location.host}`
+    const [baseUrl, setBaseUrl] = useState('');
+    // const baseUrl = `${window.location.protocol}//${window.location.host}`
     const profileUrl = `${baseUrl}/u/${username}`
+
+    useEffect(() => {
+        setBaseUrl(`${window.location.protocol}//${window.location.host}`);
+    }, []);
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(profileUrl)

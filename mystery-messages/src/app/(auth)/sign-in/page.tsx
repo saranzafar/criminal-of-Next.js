@@ -104,10 +104,10 @@ const Page = () => {
                     </form>
                 </Form>
                 <div className="text-center mt-4 text-sm">
-                    <p>
+                    <div>
                         Don't have Account?{" "}
                         <Link href={"/sign-up"} className="text-blue-600 hover:text-blue-800">Create Account</Link>
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
