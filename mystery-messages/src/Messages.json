@@ -1,27 +1,17 @@
 [
-    {
-        "title": "Message from User 1",
-        "content": "Hey, just checking in to see how things are going. It's been a while since we last talked, and I wanted to catch up. Let me know when you're free!",
-        "received": "1 day ago"
-    },
-    {
-        "title": "Message from User 2",
-        "content": "Hi! I wanted to remind you about the upcoming meeting on Friday. Please make sure to review the documents I sent over earlier this week. Thanks!",
-        "received": "2 days ago"
-    },
-    {
-        "title": "Message from User 3",
-        "content": "Hello! Just wanted to share some exciting news with you. I got the job I was telling you about! Let's celebrate soon.",
-        "received": "3 days ago"
-    },
-    {
-        "title": "Message from User 4",
-        "content": "Hey, I'm planning a get-together this weekend at my place. Would love for you to come by. Let me know if you can make it!",
-        "received": "4 days ago"
-    },
-    {
-        "title": "Message from User 5",
-        "content": "Hi there, I wanted to ask for your advice on a project I'm working on. Do you have some time to chat later this week? Your input would be really helpful.",
-        "received": "5 days ago"
-    }
+  {
+    "title": "Message from User123",
+    "content": "Hey, how are you doing today?",
+    "received": "10 minutes ago"
+  },
+  {
+    "title": "Message from SecretAdmirer",
+    "content": "I really liked your recent post!",
+    "received": "2 hours ago"
+  },
+  {
+    "title": "Message from MysteryGuest",
+    "content": "Do you have any book recommendations?",
+    "received": "1 day ago"
+  }
 ]
