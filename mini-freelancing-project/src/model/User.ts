@@ -9,7 +9,7 @@ export interface Project extends Document {
 }
 const ProjectSchema: Schema<Project> = new mongoose.Schema({
     details: { type: String, required: true },
-    amount: { type: Number, required: true }, 
+    amount: { type: Number, required: true },
     createdAt: { type: Date, default: Date.now },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
@@ -48,19 +48,19 @@ const ChatSchema: Schema<Chat> = new mongoose.Schema({
 
 // User Schema
 export interface User extends Document {
-    name: string;
+    username: string;
     email: string;
     password: string;
     verifyCode: string;
     verifyCodeExpiry: Date;
     isVerified: boolean;
     isSeller: boolean;
-    projects: mongoose.Types.ObjectId[];  
-    bids: mongoose.Types.ObjectId[];      
-    chat: mongoose.Types.ObjectId[];    
+    projects: mongoose.Types.ObjectId[];
+    bids: mongoose.Types.ObjectId[];
+    chat: mongoose.Types.ObjectId[];
 }
 const UserSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: [true, 'Username is required'],
         trim: true,
@@ -94,7 +94,7 @@ const UserSchema = new mongoose.Schema({
     },
     projects: [{ type: Schema.Types.ObjectId, ref: 'Project' }],
     bids: [{ type: Schema.Types.ObjectId, ref: 'Bid' }],
-    chat: [{ type: Schema.Types.ObjectId, ref: 'Chat' }] 
+    chat: [{ type: Schema.Types.ObjectId, ref: 'Chat' }]
 }, { timestamps: true });
 
 // User Model
