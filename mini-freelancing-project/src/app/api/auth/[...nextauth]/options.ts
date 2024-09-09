@@ -14,12 +14,12 @@ export const authOptions: NextAuthOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials: any): Promise<any> {
-                await dbConnect()
+                await dbConnect();
                 try {
                     const user = await UserModel.findOne({
                         $or: [
-                            { email: credentials.identifier },
-                            { username: credentials.identifier },
+                            { email: credentials.email },
+                            { username: credentials.email },
                         ]
                     });
                     if (!user) {
@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
                     }
 
                 } catch (err: any) {
-                    throw new Error(err);
+                    throw new Error(err.message);
                 }
             }
         }),
@@ -47,9 +47,10 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token._id = user._id?.toString(); // Convert ObjectId to string
+                token._id = user._id?.toString();
                 token.isVerified = user.isVerified;
                 token.username = user.username;
+                token.isSeller = user.isSeller;
             }
             return token;
         },
@@ -58,6 +59,7 @@ export const authOptions: NextAuthOptions = {
                 session.user._id = token._id;
                 session.user.isVerified = token.isVerified;
                 session.user.username = token.username;
+                session.user.isSeller = token.isSeller;
             }
             return session;
         },
