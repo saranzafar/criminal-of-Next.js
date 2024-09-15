@@ -48,6 +48,7 @@ export async function POST(request: Request) {
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 1);
 
+      //crating new username
       const newUser = new UserModel({
         username,
         email,
@@ -56,7 +57,6 @@ export async function POST(request: Request) {
         verifyCodeExpiry: expiryDate,
         isVerified: false,
         isAcceptingMessages: true,
-        messages: [],
       });
 
       await newUser.save();

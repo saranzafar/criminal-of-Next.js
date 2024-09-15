@@ -5,6 +5,8 @@ import { sendVerificationEmail } from '@/helpers/sendVerificationEmail';
 
 export async function POST(request: Request) {
     await dbConnect();
+    console.log("SIGNUP API CALLED");
+
 
     try {
         const { username, email, password, isSeller } = await request.json();
@@ -15,6 +17,7 @@ export async function POST(request: Request) {
         });
 
         if (existingVerifiedUserByUsername) {
+            console.log("existingVerifiedUserByUsername");
             return Response.json(
                 {
                     success: false,
@@ -29,6 +32,8 @@ export async function POST(request: Request) {
 
         if (existingUserByEmail) {
             if (existingUserByEmail.isVerified) {
+                console.log("existingUserByEmail");
+
                 return Response.json(
                     {
                         success: false,

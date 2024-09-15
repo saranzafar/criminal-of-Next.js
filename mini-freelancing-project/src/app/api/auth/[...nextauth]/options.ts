@@ -1,8 +1,8 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -10,30 +10,37 @@ export const authOptions: NextAuthOptions = {
             id: 'credentials',
             name: 'Credentials',
             credentials: {
-                email: { label: 'Email', type: 'text' },
+                identifier: { label: 'Email or Username', type: 'text' }, // This field will accept either
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials: any): Promise<any> {
                 await dbConnect();
+
                 try {
+                    // Look for a user by either email or username
                     const user = await UserModel.findOne({
                         $or: [
-                            { email: credentials.email },
-                            { username: credentials.email },
+                            { email: credentials.identifier },  // Check if it's an email
+                            { username: credentials.identifier },  // Check if it's a username
                         ]
                     });
+
                     if (!user) {
-                        throw new Error('No user found with this email');
+                        throw new Error('No user found with this email or username');
                     }
+
                     if (!user.isVerified) {
                         throw new Error('Please verify your account before logging in');
                     }
+
+                    // Check if the provided password matches the hashed password in the database
                     const isPasswordCorrect = await bcrypt.compare(
                         credentials.password,
                         user.password
                     );
+
                     if (isPasswordCorrect) {
-                        return user;
+                        return user;  // Return the user if the password is correct
                     } else {
                         throw new Error('Incorrect password');
                     }
@@ -71,4 +78,4 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/sign-in',
     },
-}
+};
