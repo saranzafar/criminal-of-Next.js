@@ -10,18 +10,17 @@ export const authOptions: NextAuthOptions = {
             id: 'credentials',
             name: 'Credentials',
             credentials: {
-                identifier: { label: 'Email or Username', type: 'text' }, // This field will accept either
+                identifier: { label: 'Email or Username', type: 'text' },
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials: any): Promise<any> {
                 await dbConnect();
 
                 try {
-                    // Look for a user by either email or username
                     const user = await UserModel.findOne({
                         $or: [
-                            { email: credentials.identifier },  // Check if it's an email
-                            { username: credentials.identifier },  // Check if it's a username
+                            { email: credentials.identifier },
+                            { username: credentials.identifier },
                         ]
                     });
 
@@ -71,10 +70,11 @@ export const authOptions: NextAuthOptions = {
             return session;
         },
     },
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',
+        maxAge: 7 * 24 * 60 * 60,
     },
-    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/sign-in',
     },
