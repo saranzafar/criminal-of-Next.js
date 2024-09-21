@@ -1,12 +1,17 @@
-import React from 'react'
 
+import { Navbar } from "@/components/Navbar"
+import { Footer } from "@/components/Footer"
 
-function Layout() {
-    return (
-        <div>
-            Hi this is layout
-        </div>
-    )
+interface RootLayoutProps {
+    children: React.ReactNode;
 }
 
-export default Layout
+export default async function RootLayout({ children }: RootLayoutProps) {
+    return (
+        <div className="flex flex-col p-4 w-screen">
+            <Navbar />
+            {children}
+            <Footer />
+        </div>
+    );
+}

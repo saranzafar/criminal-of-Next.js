@@ -1,8 +1,11 @@
 import React from 'react'
+import { Client } from "@/components/dashboard/client"
 
 function Page() {
     return (
-        <div>Dashboard</div>
+        <div>
+            <Client />
+        </div>
     )
 }
 
