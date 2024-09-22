@@ -1,17 +1,17 @@
 import dbConnect from "@/lib/dbConnect";
-import { ProjectModel } from "@/model/User";
-import { getServerSession } from "next-auth";
+import { ProjectModel } from "@/model/User"
+import { getServerSession, User } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
+
 
 export async function POST(request: Request) {
     await dbConnect();
-    console.log("Project API CALLED");
-
+    console.log("project API CALLED");
     const session = await getServerSession(authOptions);
-    const _user = session?.user;
+    const _user: User = session?.user;
     if (!session || !_user) {
-        return new Response(
-            JSON.stringify({ success: false, message: "Not authenticated" }),
+        return Response.json(
+            { success: false, message: 'Not authenticated' },
             { status: 401 }
         );
     }
@@ -24,25 +24,24 @@ export async function POST(request: Request) {
             title,
             details,
             amount,
-            userId: _user.id,
-        });
-
+            userId: _user._id
+        })
         await createdProject.save();
 
-        return new Response(
-            JSON.stringify({
+        return Response.json(
+            {
                 success: true,
-                message: "Project uploaded successfully",
-            }),
+                message: 'Project Uploaded successfully',
+            },
             { status: 201 }
         );
     } catch (error) {
-        console.error("Error uploading project:", error);
-        return new Response(
-            JSON.stringify({
+        console.error('Error adding project:', error);
+        return Response.json(
+            {
                 success: false,
-                message: "Error uploading project",
-            }),
+                message: 'Error uploading project',
+            },
             { status: 500 }
         );
     }

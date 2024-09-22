@@ -28,7 +28,7 @@ export function Navbar() {
 
             <div className="w-screen flex items-center justify-between px-6">
                 {/* Left: Company Name */}
-                <div className="text-teal-600 text-xl font-semibold">
+                <div className="text-teal-600  text-xl font-semibold">
                     mini-lancing
                 </div>
 
@@ -37,7 +37,7 @@ export function Navbar() {
                     <NavigationMenuItem>
                         <Link href="/dashboard" legacyBehavior passHref>
                             <NavigationMenuLink
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <Home className="mr-2 h-5 w-5" />
                                 Dashboard
@@ -48,7 +48,7 @@ export function Navbar() {
                     <NavigationMenuItem>
                         <Link href="/projects" legacyBehavior passHref>
                             <NavigationMenuLink
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <Briefcase className="mr-2 h-5 w-5" />
                                 Projects
@@ -59,7 +59,7 @@ export function Navbar() {
                     <NavigationMenuItem>
                         <Link href="/u/profile" legacyBehavior passHref>
                             <NavigationMenuLink
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <User className="mr-2 h-5 w-5" />
                                 Profile
@@ -70,7 +70,7 @@ export function Navbar() {
                     <NavigationMenuItem>
                         <Link href="/chat" legacyBehavior passHref>
                             <NavigationMenuLink
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <Chat className="mr-2 h-5 w-5" />
                                 Chat
@@ -97,7 +97,7 @@ export function Navbar() {
                 >
                     {/* Rotate the menu icon on click */}
                     <Menu
-                        className={`h-6 w-6 text-teal-600 transition-transform duration-300 ${isMobileMenuOpen ? "rotate-90" : "rotate-0"
+                        className={`h-6 w-6 text-gray-800 text-lg transition-transform duration-300 ${isMobileMenuOpen ? "rotate-90" : "rotate-0"
                             }`}
                     />
                 </Button>
@@ -113,7 +113,7 @@ export function Navbar() {
                         <Link href="/dashboard" legacyBehavior passHref>
                             <NavigationMenuLink
                                 onClick={handleMenuClose}
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <Home className="mr-2 h-5 w-5" />
                                 Dashboard
@@ -125,7 +125,7 @@ export function Navbar() {
                         <Link href="/projects" legacyBehavior passHref>
                             <NavigationMenuLink
                                 onClick={handleMenuClose}
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <Briefcase className="mr-2 h-5 w-5" />
                                 Projects
@@ -137,7 +137,7 @@ export function Navbar() {
                         <Link href="/u/profile" legacyBehavior passHref>
                             <NavigationMenuLink
                                 onClick={handleMenuClose}
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <User className="mr-2 h-5 w-5" />
                                 Profile
@@ -149,7 +149,7 @@ export function Navbar() {
                         <Link href="/chat" legacyBehavior passHref>
                             <NavigationMenuLink
                                 onClick={handleMenuClose}
-                                className={`text-teal-600 hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
                                 <Chat className="mr-2 h-5 w-5" />
                                 Chat

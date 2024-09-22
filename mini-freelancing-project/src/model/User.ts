@@ -2,14 +2,17 @@ import mongoose, { Schema, Document } from "mongoose";
 
 // Project Schema
 export interface Project extends Document {
+    title: string;
     details: string;
-    amount: number;  // Changed to number
+    amount: string;
     createdAt: Date;
     userId: mongoose.Types.ObjectId;
 }
+
 const ProjectSchema: Schema<Project> = new mongoose.Schema({
+    title: { type: String, required: true },
     details: { type: String, required: true },
-    amount: { type: Number, required: true },
+    amount: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
@@ -22,6 +25,7 @@ export interface Bid extends Document {
     projectId: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
 }
+
 const BidSchema: Schema<Bid> = new mongoose.Schema({
     bidAmount: { type: Number, required: true },
     message: { type: String, required: true },
@@ -38,6 +42,7 @@ export interface Chat extends Document {
     image?: string;
     createdAt: Date;
 }
+
 const ChatSchema: Schema<Chat> = new mongoose.Schema({
     senderId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     receiverId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -55,10 +60,10 @@ export interface User extends Document {
     verifyCodeExpiry: Date;
     isVerified: boolean;
     isSeller: boolean;
-    projects: mongoose.Types.ObjectId[];
     bids: mongoose.Types.ObjectId[];
     chat: mongoose.Types.ObjectId[];
 }
+
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -92,11 +97,14 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    projects: [{ type: Schema.Types.ObjectId, ref: 'Project' }],
     bids: [{ type: Schema.Types.ObjectId, ref: 'Bid' }],
     chat: [{ type: Schema.Types.ObjectId, ref: 'Chat' }]
 }, { timestamps: true });
 
-// User Model
-const UserModel = mongoose.models.User as mongoose.Model<User> || mongoose.model<User>("User", UserSchema);
-export default UserModel;
+// Models
+const UserModel = mongoose.models.User || mongoose.model<User>("User", UserSchema);
+const ProjectModel = mongoose.models.Project || mongoose.model<Project>("Project", ProjectSchema);
+const BidModel = mongoose.models.Bid || mongoose.model<Bid>("Bid", BidSchema);
+const ChatModel = mongoose.models.Chat || mongoose.model<Chat>("Chat", ChatSchema);
+
+export { UserModel, ProjectModel, BidModel, ChatModel };
