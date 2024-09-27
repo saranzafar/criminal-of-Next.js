@@ -30,10 +30,7 @@ function Client() {
     const onSubmit = async (data: z.infer<typeof projectSchema>) => {
         setIsUploading(true);
         try {
-            console.log("DATE: ", data);
-
-            const response = await axios.post("/api/project", data);
-            console.log("Project response: ", response.data);
+            await axios.post("/api/project", data);
 
             toast({
                 title: "Success",

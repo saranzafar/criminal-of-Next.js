@@ -30,8 +30,8 @@ export function Navbar() {
 
             <div className="w-screen flex items-center justify-between px-6">
                 {/* Left: Company Name */}
-                <div className="text-teal-600  text-xl font-semibold">
-                    mini-lancing
+                <div className="text-teal-600  text-2xl font-semibold">
+                    Mini-Lancing
                 </div>
 
                 {/* Right: Desktop Navigation Menu */}
@@ -59,7 +59,7 @@ export function Navbar() {
                     </NavigationMenuItem>
 
                     <NavigationMenuItem>
-                        <Link href="/u/profile" legacyBehavior passHref>
+                        <Link href={`/profile`} legacyBehavior passHref>
                             <NavigationMenuLink
                                 className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
                             >
