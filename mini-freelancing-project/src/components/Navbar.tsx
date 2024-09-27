@@ -11,6 +11,7 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
+import { signOut } from 'next-auth/react';
 
 export function Navbar() {
     const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -22,6 +23,7 @@ export function Navbar() {
     const handleMenuClose = () => {
         setMobileMenuOpen(false);
     };
+
 
     return (
         <NavigationMenu className="border-b-[1px] border-gray-100 py-4 shadow-sm">
@@ -78,14 +80,13 @@ export function Navbar() {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/" legacyBehavior passHref>
-                            <NavigationMenuLink
-                                className={`text-red-600 hover:text-red-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
-                            >
-                                <LogOut className="mr-2 h-5 w-5" />
-                                Logout
-                            </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink
+                            onClick={() => signOut()}
+                            className={`cursor-pointer text-red-600 hover:text-red-500 hover:bg-red-50 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                        >
+                            <LogOut className="mr-2 h-5 w-5" />
+                            Logout
+                        </NavigationMenuLink>
                     </NavigationMenuItem>
                 </NavigationMenuList>
 
