@@ -72,6 +72,7 @@ function Client() {
                                     <FormControl>
                                         <Input
                                             placeholder="Enter project title"
+                                            required
                                             className="border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md"
                                             {...field}
                                         />
@@ -89,6 +90,7 @@ function Client() {
                                     <FormControl>
                                         <Textarea
                                             placeholder="Enter project details"
+                                            required
                                             className="border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md"
                                             {...field}
                                         />
@@ -106,6 +108,7 @@ function Client() {
                                     <FormControl>
                                         <Input
                                             type="string"
+                                            required
                                             placeholder="Enter Your Budget"
                                             className="border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md"
                                             {...field}
