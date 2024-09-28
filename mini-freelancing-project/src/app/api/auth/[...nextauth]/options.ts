@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
                 token._id = user._id?.toString();
                 token.isVerified = user.isVerified;
                 token.username = user.username;
-                token.isSeller = user.isSeller;
+                token.accountType = user.accountType;
             }
             return token;
         },
@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
                 session.user._id = token._id;
                 session.user.isVerified = token.isVerified;
                 session.user.username = token.username;
-                session.user.isSeller = token.isSeller;
+                token.accountType = token.accountType;
             }
             return session;
         },

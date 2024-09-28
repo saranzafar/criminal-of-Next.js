@@ -59,7 +59,7 @@ export interface User extends Document {
     verifyCode: string;
     verifyCodeExpiry: Date;
     isVerified: boolean;
-    isSeller: boolean;
+    userType: string;
     bids: mongoose.Types.ObjectId[];
     chat: mongoose.Types.ObjectId[];
 }
@@ -93,8 +93,8 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    isSeller: {
-        type: Boolean,
+    userType: {
+        type: String,
         default: false,
     },
     bids: [{ type: Schema.Types.ObjectId, ref: 'Bid' }],

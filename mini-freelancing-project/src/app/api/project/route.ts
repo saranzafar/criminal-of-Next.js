@@ -19,7 +19,6 @@ export async function POST(request: Request) {
 
     try {
         const { title, details, amount } = await request.json();
-        console.log("Project details: ", title, details, amount);
 
         const createdProject = new ProjectModel({
             title,

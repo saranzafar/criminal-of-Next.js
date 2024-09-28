@@ -15,6 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 function Page() {
     const [username, setUsername] = useState("");
@@ -33,8 +34,10 @@ function Page() {
             username: "",
             password: "",
             email: "",
+            userType: "client",
         },
     });
+
 
     useEffect(() => {
         const checkUsernameUniqueness = async () => {
@@ -63,7 +66,6 @@ function Page() {
                 title: "Sign up successful",
                 description: response.data.message,
             });
-            console.log("Going to rplace");
 
             router.replace(`/verify/${data.username}`);
         } catch (error) {
@@ -86,7 +88,7 @@ function Page() {
                 <div className="text-center mb-4">
                     <h2 className="text-4xl font-bold text-gray-800">Create Your Account</h2>
                     <p className="mt-2 text-sm text-gray-500">
-                        Join us and start your freelancing journey.
+                        Join us and start your journey.
                     </p>
                 </div>
 
@@ -157,6 +159,28 @@ function Page() {
                                 </FormItem>
                             )}
                         />
+                        {/* Dropdown for User Type */}
+                        <FormField
+                            control={form.control}
+                            name="userType"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-gray-700">Join Mini-lancing As?</FormLabel>
+                                    <FormControl>
+                                        <Select onValueChange={field.onChange}>
+                                            <SelectTrigger className="border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md">
+                                                <SelectValue placeholder="Select role" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="freelancer">Freelancer</SelectItem>
+                                                <SelectItem value="client">Client</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <Button
                             type="submit"
                             className="w-full bg-teal-600 text-white py-2 px-4 rounded-md shadow-lg hover:bg-teal-700 focus:ring-4 focus:ring-teal-400 focus:outline-none transition"
@@ -184,7 +208,6 @@ function Page() {
                 </div>
             </div>
         </div>
-
     );
 }
 
