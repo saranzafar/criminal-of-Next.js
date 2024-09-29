@@ -3,9 +3,10 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/model/User";
 
+// POST route for toggling account type
 export async function POST() {
     await dbConnect();
-    console.log("Toggle Account Type API Called",);
+    console.log("Toggle Account Type API Called");
 
     const session = await getServerSession(authOptions);
     const _user = session?.user;
@@ -15,7 +16,6 @@ export async function POST() {
             { status: 401 }
         );
     }
-    console.log("THIS IS USER: ", _user);
 
     try {
         const user = await UserModel.findById(_user._id);
@@ -26,18 +26,18 @@ export async function POST() {
             );
         }
 
-        console.log("user.accountType: ", user.accountType);
-        const newAccountType = user.accountType == "client" ? "client" : "freelancer";
+        console.log("user.accountType: ", user.userType);
+        const newAccountType = user.userType == "client" ? "freelancer" : "client";
         console.log("NEW ACCOUNT: ", newAccountType);
 
-        user.accountType = newAccountType;
+        user.userType = newAccountType;
         await user.save();
 
         return new Response(
             JSON.stringify({
                 success: true,
                 message: "Account type updated successfully",
-                accountType: newAccountType,
+                userType: newAccountType,
             }),
             { status: 200 }
         );
@@ -45,6 +45,48 @@ export async function POST() {
         console.error("Error toggling account type:", error);
         return new Response(
             JSON.stringify({ success: false, message: "Error updating account type" }),
+            { status: 500 }
+        );
+    }
+}
+
+// GET route for fetching userType
+export async function GET() {
+    await dbConnect();
+    console.log("Fetch User Type API Called");
+
+    const session = await getServerSession(authOptions);
+    const _user = session?.user;
+
+    if (!session || !_user) {
+        return new Response(
+            JSON.stringify({ success: false, message: "Not authenticated" }),
+            { status: 401 }
+        );
+    }
+
+    try {
+        const user = await UserModel.findById(_user._id);
+        if (!user) {
+            return new Response(
+                JSON.stringify({ success: false, message: "User not found" }),
+                { status: 404 }
+            );
+        }
+
+        const userType = user.userType;
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                userType: userType,
+            }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error fetching user type:", error);
+        return new Response(
+            JSON.stringify({ success: false, message: "Error fetching user type" }),
             { status: 500 }
         );
     }

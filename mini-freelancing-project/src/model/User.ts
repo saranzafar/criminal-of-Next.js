@@ -7,6 +7,7 @@ export interface Project extends Document {
     amount: string;
     createdAt: Date;
     userId: mongoose.Types.ObjectId;
+    bids: [];
 }
 
 const ProjectSchema: Schema<Project> = new mongoose.Schema({
@@ -14,7 +15,8 @@ const ProjectSchema: Schema<Project> = new mongoose.Schema({
     details: { type: String, required: true },
     amount: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    bids: []
 }, { timestamps: true });
 
 // Bid Schema
@@ -95,7 +97,7 @@ const UserSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        default: false,
+        default: "client",
     },
     bids: [{ type: Schema.Types.ObjectId, ref: 'Bid' }],
     chat: [{ type: Schema.Types.ObjectId, ref: 'Chat' }]

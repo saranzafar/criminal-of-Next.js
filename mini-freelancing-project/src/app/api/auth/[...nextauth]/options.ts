@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
                     );
 
                     if (isPasswordCorrect) {
-                        return user;  // Return the user if the password is correct
+                        return user;
                     } else {
                         throw new Error('Incorrect password');
                     }
@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
                 token._id = user._id?.toString();
                 token.isVerified = user.isVerified;
                 token.username = user.username;
-                token.accountType = user.accountType;
+                token.userType = user.userType;
             }
             return token;
         },
@@ -65,11 +65,12 @@ export const authOptions: NextAuthOptions = {
                 session.user._id = token._id;
                 session.user.isVerified = token.isVerified;
                 session.user.username = token.username;
-                token.accountType = token.accountType;
+                session.user.userType = token.userType;
             }
             return session;
-        },
+        }
     },
+
     secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',

@@ -1,35 +1,54 @@
-"use client"
+"use client";
 
-// components/UserProfile.tsx
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
-
 const UserProfile = () => {
     const { data: session } = useSession();
-    const [accountType, setAccountType] = useState(session?.user?.accountType || "Client");
     const { toast } = useToast();
     const router = useRouter();
+
+    const [accountType, setAccountType] = useState("client");
+
+    // Fetch userType on component mount
+    const fetchUserType = async () => {
+        try {
+            const response = await axios.get("/api/profile");
+            if (response.status === 200) {
+                setAccountType(response.data.userType);
+            }
+        } catch (error) {
+            console.error("Error fetching user type:", error);
+            toast({
+                title: "Success",
+                description: "Error while fetching user type",
+                variant: "default",
+            });
+        }
+    };
+
+    useEffect(() => {
+        fetchUserType();
+    }, []);
 
     const toggleAccountType = async () => {
         try {
             const response = await axios.post("/api/profile");
 
             if (response.status === 200) {
-                const data = response.data;
-                setAccountType(data.accountType);
                 toast({
                     title: "Success",
-                    description: "Account Switched",
+                    description: "Account switched successfully.",
                     variant: "default",
                 });
-                router.replace("/dashboard")
+                fetchUserType()
+                router.refresh();
             } else {
                 toast({
                     title: "Error",
@@ -41,16 +60,15 @@ const UserProfile = () => {
             console.error("Error toggling account type:", error);
             toast({
                 title: "Error",
-                description: "Error while switch account.",
+                description: "Error while switching account.",
                 variant: "destructive",
             });
         }
     };
 
-
     if (!session) {
         return (
-            <Card className="w-full max-w-md p-4">
+            <Card className="w-full max-w-md p-4 mx-auto mt-32 text-center mb-60">
                 <CardHeader>
                     <CardTitle>Not Signed In</CardTitle>
                 </CardHeader>
@@ -63,26 +81,30 @@ const UserProfile = () => {
 
     const { user } = session;
     return (
-        <Card className="w-full max-w-md p-4 mx-auto mt-10  mb-80">
+        <Card className="w-full max-w-md p-4 mx-auto mt-10 mb-80">
             <CardHeader>
                 <div className="flex items-center space-x-4">
                     <Avatar className="w-16 h-16">
-                        {user.image ? (
-                            <AvatarImage src={user.image} alt={user.name || "User"} />
-                        ) : (
-                            <AvatarFallback>{user.username?.[0]}</AvatarFallback>
-                        )}
+                        <AvatarFallback>{user.username?.[0]}</AvatarFallback>
                     </Avatar>
                     <div>
                         <CardTitle>{user.username}</CardTitle>
                         <p className="text-sm text-muted-foreground">{user.email}</p>
-                        <p className="text-sm text-muted-foreground">Account Type: {accountType}</p>
+                        <p className="text-sm text-muted-foreground">
+                            Account Type:
+                            <span className={`font-semibold ${accountType === "freelancer" ? "text-teal-600" : "text-blue-600"}`}>
+                                {accountType}
+                            </span>
+                        </p>
                     </div>
                 </div>
             </CardHeader>
-            <CardContent className="">
-                <Button onClick={toggleAccountType} className="mt-4 mr-4 bg-teal-600 hover:bg-teal-700">
-                    Switch to {accountType === "Client" ? "Freelancer" : "Client"}
+            <CardContent>
+                <Button
+                    onClick={toggleAccountType}
+                    className="mt-4 mr-4 bg-teal-600 hover:bg-teal-700"
+                >
+                    Switch to {accountType === "client" ? "Freelancer" : "Client"}
                 </Button>
                 <Button variant="secondary" onClick={() => signOut()} className="mt-2">
                     Sign Out

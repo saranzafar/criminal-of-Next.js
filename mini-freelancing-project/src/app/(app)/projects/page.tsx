@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // CSS for DatePicker
-
+import { useRouter } from "next/navigation";
 
 // Define a type for project
 interface Project {
@@ -29,6 +29,7 @@ export default function ViewProjects() {
     const [searchTerm, setSearchTerm] = useState("");
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const router = useRouter()
 
     useEffect(() => {
         async function fetchProjects() {
@@ -96,7 +97,9 @@ export default function ViewProjects() {
             setIsDeleting(false)
         }
     };
-
+    const handleSeeMore = async (id: string) => {
+        router.push(`/projects/${id}`)
+    }
     return (
         <div className="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto w-full">
@@ -153,7 +156,7 @@ export default function ViewProjects() {
                                     <p className="text-teal-600 font-medium mb-4">
                                         Budget: ${project.amount}
                                     </p>
-                                    <div className="text-right">
+                                    <div className="text-right gap-4 space-x-5">
                                         <Button
                                             variant="outline"
                                             disabled={isDeleting}
@@ -161,6 +164,14 @@ export default function ViewProjects() {
                                             onClick={() => handleDelete(project._id)}
                                         >
                                             Delete
+                                        </Button>
+                                        <Button
+                                            variant="default"
+                                            disabled={isDeleting}
+                                            className="bg-teal-600 hover:bg-teal-700"
+                                            onClick={() => handleSeeMore(project._id)}
+                                        >
+                                            See more
                                         </Button>
                                     </div>
                                 </CardContent>
