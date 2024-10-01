@@ -20,7 +20,7 @@ interface Project {
     updatedAt: string;
 }
 
-export default function ViewProjects() {
+export default function ViewProjects({ title, primaryBtn }) {
     const [projects, setProjects] = useState<Project[]>([]);
     const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -100,10 +100,11 @@ export default function ViewProjects() {
     const handleSeeMore = async (id: string) => {
         router.push(`/projects/${id}`)
     }
+    
     return (
         <div className="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto w-full">
-                <h2 className="text-3xl font-bold text-gray-800 mb-6">Your Projects</h2>
+                <h2 className="text-3xl font-bold text-gray-800 mb-6">{title ? title : "Your Projects"}</h2>
 
                 {/* Filters Section */}
                 <div className="mb-6 flex space-x-4 items-end">
@@ -157,22 +158,35 @@ export default function ViewProjects() {
                                         Budget: ${project.amount}
                                     </p>
                                     <div className="text-right gap-4 space-x-5">
-                                        <Button
-                                            variant="outline"
-                                            disabled={isDeleting}
-                                            className="border-red-500 text-red-500 hover:bg-red-100 hover:text-red-600"
-                                            onClick={() => handleDelete(project._id)}
-                                        >
-                                            Delete
-                                        </Button>
-                                        <Button
-                                            variant="default"
-                                            disabled={isDeleting}
-                                            className="bg-teal-600 hover:bg-teal-700"
-                                            onClick={() => handleSeeMore(project._id)}
-                                        >
-                                            See more
-                                        </Button>
+                                        {primaryBtn ? (
+                                            <Button
+                                                variant="default"
+                                                disabled={isDeleting}
+                                                className="bg-teal-600 hover:bg-teal-700"
+                                                onClick={() => handleSeeMore(project._id)}
+                                            >
+                                                Bid now
+                                            </Button>
+                                        ) : (
+                                            <>
+                                                <Button
+                                                    variant="outline"
+                                                    disabled={isDeleting}
+                                                    className="border-red-500 text-red-500 hover:bg-red-100 hover:text-red-600"
+                                                    onClick={() => handleDelete(project._id)}
+                                                >
+                                                    Delete
+                                                </Button>
+                                                <Button
+                                                    variant="default"
+                                                    disabled={isDeleting}
+                                                    className="bg-teal-600 hover:bg-teal-700"
+                                                    onClick={() => handleSeeMore(project._id)}
+                                                >
+                                                    See more
+                                                </Button>
+                                            </>
+                                        )}
                                     </div>
                                 </CardContent>
                             </Card>

@@ -3,7 +3,7 @@
 
 function Page() {
     return (
-        <div>projects</div>
+        <div>bids</div>
     )
 }
 

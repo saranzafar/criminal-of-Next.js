@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { signOut } from 'next-auth/react';
+import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 
 export function Navbar() {
     const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -23,6 +25,29 @@ export function Navbar() {
     const handleMenuClose = () => {
         setMobileMenuOpen(false);
     };
+
+    const [accountType, setAccountType] = React.useState(null)
+    const { toast } = useToast()
+
+    const fetchUserType = async () => {
+        try {
+            const response = await axios.get("/api/profile");
+            if (response.status === 200) {
+                setAccountType(response.data.userType);
+            }
+        } catch (error) {
+            console.error("Error fetching user type:", error);
+            toast({
+                title: "Success",
+                description: "Error while fetching user type",
+                variant: "default",
+            });
+        }
+    };
+
+    React.useEffect(() => {
+        fetchUserType();
+    }, []);
 
 
     return (
@@ -48,14 +73,27 @@ export function Navbar() {
                     </NavigationMenuItem>
 
                     <NavigationMenuItem>
-                        <Link href="/projects" legacyBehavior passHref>
-                            <NavigationMenuLink
-                                className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
-                            >
-                                <Briefcase className="mr-2 h-5 w-5" />
-                                Projects
-                            </NavigationMenuLink>
-                        </Link>
+                        {accountType === "client" ? (
+                            <Link href="/projects" legacyBehavior passHref>
+                                <NavigationMenuLink
+                                    className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                >
+                                    <Briefcase className="mr-2 h-5 w-5" />
+                                    Projects
+                                </NavigationMenuLink>
+                            </Link>
+                        ) : (
+                            <Link href="/bids" legacyBehavior passHref>
+                                <NavigationMenuLink
+                                    className={`text-gray-800 text-lg hover:text-teal-800 flex items-center transition-colors ${navigationMenuTriggerStyle()}`}
+                                >
+                                    <Briefcase className="mr-2 h-5 w-5" />
+                                    Bids
+                                </NavigationMenuLink>
+                            </Link>
+                        )}
+
+
                     </NavigationMenuItem>
 
                     <NavigationMenuItem>

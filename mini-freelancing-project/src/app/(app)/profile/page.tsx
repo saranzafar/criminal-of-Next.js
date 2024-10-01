@@ -48,7 +48,8 @@ const UserProfile = () => {
                     variant: "default",
                 });
                 fetchUserType()
-                router.refresh();
+
+                window.location.reload()
             } else {
                 toast({
                     title: "Error",
