@@ -4,21 +4,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
-import { useForm } from 'react-hook-form';
-import { z, ZodSchema } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormMessage, } from "@/components/ui/form";
 
 // Define TypeScript interfaces for the project and bids
 interface Bid {
+    createdAt: string | number | Date;
     username: string;
     userId: string;
-    comment: string;
-    date: string;
+    bid: string;
 }
 
 interface Project {
@@ -37,35 +33,17 @@ const Page = () => {
     const [project, setProject] = useState<Project | null>(null);
     const { toast } = useToast();
     const [accountType, setAccountType] = useState<string | null>(null);
+    const [bidSubmitting, setBidSubmitting] = useState(false);
+    const [bidText, setBidText] = useState<string>("");
 
     useEffect(() => {
         const fetchProject = async () => {
             if (id) {
                 try {
                     const response = await axios.get(`/api/project/${id}`);
-                    if (response.status === 200) {
-                        // Dummy data for demonstration purposes
-                        const dummyBids: Bid[] = [
-                            {
-                                username: "User1",
-                                userId: "66f98c8fb278f6f1e6c5ddce",
-                                comment: "This is my first bid.",
-                                date: new Date().toISOString(),
-                            },
-                            {
-                                username: "User2",
-                                userId: "66f98c8fb278f6f1e6c5ddcf",
-                                comment: "This is my second bid.",
-                                date: new Date().toISOString(),
-                            },
-                        ];
+                    console.log("REsponse: ", response.data);
 
-                        const projectData = response.data?.project;
-                        if (projectData) {
-                            projectData.bids = projectData?.bids?.length > 0 ? projectData.bids : dummyBids;
-                            setProject(projectData);
-                        }
-                    }
+                    setProject(response.data.project);
                 } catch (error) {
                     console.error("Error fetching project data:", error);
                     toast({
@@ -117,6 +95,7 @@ const Page = () => {
             });
         }
     };
+
     useEffect(() => {
         fetchUserType();
     }, []);
@@ -129,75 +108,41 @@ const Page = () => {
         );
     }
 
-    // Zod validation schema
-    const bidSchema: ZodSchema = z.object({
-        comment: z.string().min(1, "Bid comment is required."),
-        username: z.string(),
-        userId: z.string(),
-    });
+    const handleSubmitBid = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (bidText.trim().length < 5) {
+            toast({
+                title: "Error",
+                description: "Bid must be at least 5 characters long.",
+                variant: "destructive",
+            });
+            return;
+        }
 
-    const BidForm = () => {
-        const { toast } = useToast();
-        const { id } = useParams(); // Get project ID from URL
-        const form = useForm({
-            resolver: zodResolver(bidSchema),
-            defaultValues: {
-                comment: '',
-            },
-        });
+        setBidSubmitting(true);
+        try {
+            const response = await axios.post(`/api/bids`, {
+                projectId: id,
+                bid: bidText,
+            });
+            console.log("RESPONSE: ", response.data);
+            toast({
+                title: "Success",
+                description: response.data?.message || "Bid submitted successfully.",
+                variant: "default",
+            });
+            setBidText("");
 
-        const onSubmit = async (data: { comment: string }) => {
-            try {
-                const response = await axios.post(`/api/bids`, {
-                    projectId: id,
-                    comment: data.comment,
-                });
-
-                if (response.status === 200) {
-                    toast({
-                        title: "Success",
-                        description: "Bid submitted successfully.",
-                        variant: "default",
-                    });
-                    form.reset();
-                } else {
-                    throw new Error("Failed to submit bid.");
-                }
-            } catch (error) {
-                console.error("Error submitting bid:", error);
-                toast({
-                    title: "Error",
-                    description: "Failed to submit bid.",
-                    variant: "destructive",
-                });
-            }
-        };
-        return (
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-fulle space-y-6">
-                    <FormField
-                        control={form.control}
-                        name="comment"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Textarea
-                                        placeholder="Describe your bid here"
-                                        className="resize-none"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormDescription>
-                                    Keep your bid concise and to the point.
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="submit">Submit Bid</Button>
-                </form>
-            </Form>
-        );
+        } catch (error) {
+            console.error("Error submitting bid:", error);
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "Failed to submit bid.",
+                variant: "destructive",
+            });
+        } finally {
+            setBidSubmitting(false);
+        }
     };
 
     return (
@@ -219,16 +164,17 @@ const Page = () => {
                     )}
                 </CardHeader>
             </Card>
-            <Card className="w-full max-w-4xl mt-10 divide-y divide">
-                {accountType === "client" ? (
+
+            {accountType === "client" ? (
+                <Card className="w-full max-w-4xl mt-10 divide-y divide">
                     <CardContent>
                         <h2 className="text-xl font-semibold mt-4 mb-4">Bids</h2>
-                        {project.bids && project.bids.length > 0 ? (
+                        {project?.bids && project.bids?.length > 0 ? (
                             project.bids.map((bid, index) => (
                                 <div key={index} className="border p-4 my-2 rounded-md shadow-sm space-y-2">
                                     <p className="font-bold">{bid.username}</p>
-                                    <p className="text-sm">Bid Detail: {bid.comment}</p>
-                                    <p className="text-xs text-gray-500">{new Date(bid.date).toLocaleDateString()}</p>
+                                    <p className="text-sm">Bid Detail: {bid.bid}</p>
+                                    <p className="text-xs text-gray-500">{new Date(bid.createdAt).toLocaleDateString()}</p>
                                     <div className="w-full text-right">
                                         <Button className="bg-teal-600 text-white hover:bg-teal-700">Discuss</Button>
                                     </div>
@@ -238,12 +184,36 @@ const Page = () => {
                             <p>No bids available for this project.</p>
                         )}
                     </CardContent>
-                ) : (
-                    <CardContent className=''>
-                        <BidForm />
-                    </CardContent>
-                )}
-            </Card>
+                </Card>
+            ) : (
+                <div className='w-[56rem] mt-16 border-t-2 pt-10'>
+                    <div className='flex justify-between my-4 px-4'>
+                        <div className='flex flex-col justify-center items-center'>
+                            <h2 className='text-xl font-bold'>Write Bid</h2>
+                            <span className='text-sm'>Concise & eye-catching</span>
+                        </div>
+                        <div className='flex flex-col justify-center items-center'>
+                            <span className='text-xl font-bold'>{project.bids.length} Bid(s)</span>
+                            <span className='text-sm'>Placed on this Project</span>
+                        </div>
+                    </div>
+                    <form onSubmit={handleSubmitBid} className="space-y-6 text-right">
+                        <Textarea
+                            placeholder="Describe your bid here"
+                            className="resize-none"
+                            value={bidText}
+                            onChange={(e) => setBidText(e.target.value)}
+                        />
+                        <Button
+                            disabled={bidSubmitting}
+                            type="submit"
+                            className='bg-teal-600 hover:bg-teal-700'
+                        >
+                            {bidSubmitting ? <Loader2 className="mr-2 animate-spin" /> : "Submit Bid"}
+                        </Button>
+                    </form>
+                </div>
+            )}
         </div>
     );
 };

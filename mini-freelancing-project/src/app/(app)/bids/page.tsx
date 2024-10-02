@@ -2,9 +2,9 @@
 
 
 function Page() {
-    return (
-        <div>bids</div>
-    )
+  return (
+    <div>Page</div>
+  )
 }
 
 export default Page

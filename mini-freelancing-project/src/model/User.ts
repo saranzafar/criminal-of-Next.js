@@ -7,7 +7,12 @@ export interface Project extends Document {
     amount: string;
     createdAt: Date;
     userId: mongoose.Types.ObjectId;
-    bids: [];
+    bids: [{
+        bid: string,
+        userId: mongoose.Types.ObjectId,
+        username: string,
+        createdAt: Date,
+    }];
 }
 
 const ProjectSchema: Schema<Project> = new mongoose.Schema({
@@ -21,16 +26,16 @@ const ProjectSchema: Schema<Project> = new mongoose.Schema({
 
 // Bid Schema
 export interface Bid extends Document {
-    bidAmount: number;
-    message: string;
+    bidContent: string;
     createdAt: Date;
     projectId: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
+    username: string
 }
 
 const BidSchema: Schema<Bid> = new mongoose.Schema({
-    bidAmount: { type: Number, required: true },
-    message: { type: String, required: true },
+    bidContent: { type: String, required: true },
+    username: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }

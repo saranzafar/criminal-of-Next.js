@@ -3,7 +3,7 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/model/User";
 
-// POST route for toggling account type
+
 export async function POST() {
     await dbConnect();
     console.log("Toggle Account Type API Called");
