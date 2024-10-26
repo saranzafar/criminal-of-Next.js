@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import { User } from "next-auth";
 import { ProjectModel } from "@/model/User";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     await dbConnect();
@@ -67,5 +68,57 @@ export async function POST(request: Request) {
         );
     }
 }
+
+
+export async function GET() {
+    await dbConnect();
+
+    const session = await getServerSession(authOptions);
+    const _user = session?.user;
+
+    if (!session || !_user) {
+        return NextResponse.json(
+            { success: false, message: 'Not authenticated' },
+            { status: 401 }
+        );
+    }
+
+    try {
+        // Fetch projects where bids array has an entry with userId matching the current user
+        const fetchedProjects = await ProjectModel.find({
+            bids: { $elemMatch: { userId: _user._id } }
+        });
+
+        if (!fetchedProjects?.length) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: 'No projects found for this user',
+                },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(
+            {
+                success: true,
+                message: 'Projects with user bids fetched successfully',
+                projects: fetchedProjects,
+            },
+            { status: 200 }
+        );
+
+    } catch (error) {
+        console.error('Error while fetching projects:', error);
+        return NextResponse.json(
+            {
+                success: false,
+                message: 'Error while fetching projects',
+            },
+            { status: 500 }
+        );
+    }
+}
+
 
 
