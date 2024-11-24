@@ -8,7 +8,7 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
     return (
-        <div className="flex flex-col p-4 w-screen">
+        <div className="flex flex-col p-4">
             <Navbar />
             {children}
             <Footer />

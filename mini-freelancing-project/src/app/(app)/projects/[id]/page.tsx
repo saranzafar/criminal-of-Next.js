@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRouter } from 'next/navigation';
 
 // Define TypeScript interfaces for the project and bids
 interface Bid {
@@ -35,6 +36,7 @@ const Page = () => {
     const [accountType, setAccountType] = useState<string | null>(null);
     const [bidSubmitting, setBidSubmitting] = useState(false);
     const [bidText, setBidText] = useState<string>("");
+    const router = useRouter();
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -176,7 +178,10 @@ const Page = () => {
                                     <p className="text-sm">Bid Detail: {bid.bid}</p>
                                     <p className="text-xs text-gray-500">{new Date(bid.createdAt).toLocaleDateString()}</p>
                                     <div className="w-full text-right">
-                                        <Button className="bg-teal-600 text-white hover:bg-teal-700">Discuss</Button>
+                                        <Button
+                                            className="bg-teal-600 text-white hover:bg-teal-700"
+                                            onClick={() => router.push("/chat")}
+                                        >Discuss</Button>
                                     </div>
                                 </div>
                             ))
