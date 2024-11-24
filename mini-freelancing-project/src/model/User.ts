@@ -46,16 +46,12 @@ export interface Chat extends Document {
     senderId: mongoose.Types.ObjectId;
     receiverId: mongoose.Types.ObjectId;
     message: string;
-    image?: string;
-    createdAt: Date;
 }
 
 const ChatSchema: Schema<Chat> = new mongoose.Schema({
     senderId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     receiverId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    message: { type: String, required: true },
-    image: { type: String },
-    createdAt: { type: Date, default: Date.now }
+    message: { type: String, required: true }
 }, { timestamps: true });
 
 // User Schema

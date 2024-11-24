@@ -1,14 +1,14 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { Client } from "@/components/dashboard/client"
+import Client from "@/components/dashboard/client"
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
 import ViewProjects from '../projects/page';
 
 function Page() {
     const title = "Recently Uploaded Projects"
-    
+
     const [accountType, setAccountType] = useState(null)
     const { toast } = useToast()
 
